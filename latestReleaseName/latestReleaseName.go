@@ -2,12 +2,12 @@ package latestReleaseName
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 )
 
 var ERR_NORELEASE = errors.New("This repository has no release.")
+var ERR_NOTFOUND = errors.New("Not Found.")
 
 func GetLatestReleaseName(user string, repository string) (name string, err error) {
 	targetUrl := "https://github.com/" + user + "/" + repository + "/releases/latest"
@@ -23,13 +23,20 @@ func GetLatestReleaseName(user string, repository string) (name string, err erro
 	}
 	defer resp.Body.Close()
 
-	fmt.Println(resp.StatusCode)
+	//	fmt.Println(resp.StatusCode)
 	if resp.StatusCode == 404 {
-		err = ERR_NORELEASE
+		err = ERR_NOTFOUND
 	} else if resp.StatusCode == 302 {
-		redirectURL := resp.Header["Location"][0]
-		urlArray := strings.Split(redirectURL, "/")
-		name = urlArray[len(urlArray)-1]
+		if urlArray[len(urlArray)-1] == "releases" &&
+			urlArray[len(urlArray)-2] == repository &&
+			urlArray[len(urlArray)-3] == user {
+			// this repository doesn't have any release
+			err = ERR_NORELEASE
+		} else {
+			redirectURL := resp.Header["Location"][0]
+			urlArray := strings.Split(redirectURL, "/")
+			name = urlArray[len(urlArray)-1]
+		}
 	}
 	return
 }
