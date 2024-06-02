@@ -34,13 +34,13 @@ getLatestReleaseName UedaTakeyuki mh-z1
 ```
 import (
   "fmt"
-	latest "github.com/UedaTakeyuki/getLatestReleaseName/latestReleaseName"
+  latest "github.com/UedaTakeyuki/getLatestReleaseName/latestReleaseName"
 )
 
 if name, err := latest.GetLatestReleaseName(user, repository); err != nil {
   slog.Error(err.Error())
 } else {
-	fmt.Println(name)
+  fmt.Println(name)
 }
 
 ```
