@@ -2,6 +2,7 @@ package latestReleaseName
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 )
@@ -22,7 +23,7 @@ func GetLatestReleaseName(user string, repository string) (name string, err erro
 	}
 	defer resp.Body.Close()
 
-	//	fmt.Println(resp.StatusCode)
+	fmt.Println(resp.StatusCode)
 	if resp.StatusCode == 404 {
 		err = ERR_NORELEASE
 	} else if resp.StatusCode == 302 {
