@@ -27,14 +27,15 @@ func GetLatestReleaseName(user string, repository string) (name string, err erro
 	if resp.StatusCode == 404 {
 		err = ERR_NOTFOUND
 	} else if resp.StatusCode == 302 {
+		redirectURL := resp.Header["Location"][0]
+		urlArray := strings.Split(redirectURL, "/")
+
 		if urlArray[len(urlArray)-1] == "releases" &&
 			urlArray[len(urlArray)-2] == repository &&
 			urlArray[len(urlArray)-3] == user {
 			// this repository doesn't have any release
 			err = ERR_NORELEASE
 		} else {
-			redirectURL := resp.Header["Location"][0]
-			urlArray := strings.Split(redirectURL, "/")
 			name = urlArray[len(urlArray)-1]
 		}
 	}
