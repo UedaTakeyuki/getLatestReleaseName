@@ -20,7 +20,6 @@ func main() {
 		}
 		fmt.Println("")
 	} else {
-		slog.Info("no error")
 		fmt.Println(name)
 	}
 }
