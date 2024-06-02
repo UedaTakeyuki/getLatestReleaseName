@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log/slog"
 	"os"
@@ -12,8 +13,7 @@ func main() {
 	user := os.Args[1]
 	repository := os.Args[2]
 	if name, err := latest.GetLatestReleaseName(user, repository); err != nil {
-		slog.Info("err", err)
-		if err == latest.ERR_NORELEASE {
+		if errors.Is(err, latest.ERR_NORELEASE) {
 			slog.Info("No release")
 		} else {
 			slog.Error(err.Error())
